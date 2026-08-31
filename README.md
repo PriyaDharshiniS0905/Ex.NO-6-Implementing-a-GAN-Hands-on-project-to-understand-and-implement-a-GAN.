@@ -1,9 +1,9 @@
 # Ex.NO-6-Implementing-a-GAN-Hands-on-project-to-understand-and-implement-a-GAN.
-## Aim :To Understand and implement a GAN
-Generative Adversarial Network (GAN)
+## AIM :
+To Understand and implement a Generative Adversarial Network (GAN).
 Generative Adversarial Networks (GAN) can generate realistic images by learning from existing image datasets. Here we will be implementing a GAN trained on the CIFAR-10 dataset using PyTorch.
-## Procedure:
-Step 1: Importing Required Libraries
+## PROCEDURE:
+**Step 1:** Importing Required Libraries
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -12,18 +12,18 @@ import datasets, transforms
 import matplotlib.pyplot as plt
 import numpy as np
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-Step 2: Defining Image Transformations
+**Step 2:** Defining Image Transformations
 Use PyTorch’s transforms to convert images to tensors and normalize pixel values between -1 and 1 for better training stability.
 transform = transforms.Compose([
 transforms.ToTensor(),
 transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-Step 3: Loading the CIFAR-10 Dataset
+**Step 3:** Loading the CIFAR-10 Dataset
 Download and load the CIFAR-10 dataset with defined transformations. Use a DataLoader to process the dataset in mini-batches of size 32 and shuffle the data
 
 train_dataset = datasets.CIFAR10(root='./data',train=True, download=True, transform=transform)
 dataloader = torch.utils.data.DataLoader(train_dataset,batch_size=32, shuffle=True)
 
-Step 4: Defining GAN Hyperparameters
+**Step 4:** Defining GAN Hyperparameters
 Set important training parameters:
 •	latent_dim: Dimensionality of the noise vector.
 •	lr: Learning rate of the optimizer.
@@ -36,7 +36,7 @@ beta1 = 0.5
 beta2 = 0.999
 num_epochs = 10
 
-Step 5: Building the Generator
+**Step 5:** Building the Generator
 Create a neural network that converts random noise into images. Use transpose convolutional layers, batch normalization and ReLU activations. The final layer uses Tanh activation to scale outputs to the range [-1, 1].
 •	nn.Linear(latent_dim, 128 * 8 * 8): Defines a fully connected layer that projects the noise vector into a higher dimensional feature space.
 •	nn.Upsample(scale_factor=2): Doubles the spatial resolution of the feature maps by upsampling.
@@ -65,7 +65,7 @@ class Generator(nn.Module):
     def forward(self, z):
         img = self.model(z)
         return img
-Step 6: Building the Discriminator
+**Step 6:** Building the Discriminator
 Create a binary classifier network that distinguishes real from fake images. Use convolutional layers, batch normalization, dropout, LeakyReLU activation and a Sigmoid output layer to give a probability between 0 and 1.
 •	nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=1): Second convolutional layer increasing channels to 64, downsampling further.
 •	nn.BatchNorm2d(256, momentum=0.8): Batch normalization for 256 feature maps with momentum 0.8.
@@ -98,7 +98,7 @@ class Discriminator(nn.Module):
     def forward(self, img):
         validity = self.model(img)
         return validity
-Step 7: Initializing GAN Components
+**Step 7:** Initializing GAN Components
 •	Generator and Discriminator are initialized on the available device (GPU or CPU).
 •	Binary Cross-Entropy (BCE) Loss is chosen as the loss function.
 •	Adam optimizers are defined separately for the generator and discriminator with specified learning rates and betas.
@@ -108,7 +108,7 @@ optimizer_G = optim.Adam(generator.parameters()
                          , lr=lr, betas=(beta1, beta2))optimizer_D = optim.Adam(discriminator.parameters()
                          , lr=lr, betas=(beta1, beta2))
 
-Step 8: Training the GAN
+**Step 8:** Training the GAN
 Train the discriminator on real and fake images, then update the generator to improve its fake image quality. Track losses and visualize generated images after each epoch.
 •	valid = torch.ones(real_images.size(0), 1, device=device): Create a tensor of ones representing real labels for the discriminator.
 •	fake = torch.zeros(real_images.size(0), 1, device=device): Create a tensor of zeros representing fake labels for the discriminator.
@@ -167,5 +167,5 @@ if (i + 1) % 100 == 0:
     
 
 
-## Conclusion:
+## CONCLUSION:
 Thus successfully implemented and trained a GAN that learns to generate realistic CIFAR-10 images through adversarial training.
